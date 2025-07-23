@@ -1,0 +1,29 @@
+archivesBaseName = "${project.tesseract_archive_base_name}-graph"
+
+dependencies {
+    compileOnly 'org.apache.logging.log4j:log4j-api:2.17.1'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
+    implementation("it.unimi.dsi:fastutil:8.5.6")
+    implementation("com.google.guava:guava:31.0.1-jre")
+}
+
+publishing {
+    if (project.should_publish == "true"){
+        publications {
+            mavenJava(org.gradle.api.publish.maven.MavenPublication) {
+                from components.java
+            }
+        }
+
+        repositories {
+            def isCI = System.getenv("CI")
+            if (isCI) {
+                maven {
+                    url System.getenv("local_maven_url")
+                }
+            } else {
+                mavenLocal()
+            }
+        }
+    }
+}
