@@ -62,7 +62,7 @@ public abstract class StandardNetwork<TSelf extends StandardNetwork<TSelf, TElem
         elements.remove(element);
         routeTracker.onElementRemoved(element);
         networkChanged = true;
-        if (element != null && element.getNetwork() == this) {
+        if (element.getNetwork() == this) {
             for (var component : element.getComponents()) {
                 removeComponentImpl(component.left(), component.right());
             }

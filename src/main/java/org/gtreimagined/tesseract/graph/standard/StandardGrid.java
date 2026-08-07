@@ -9,6 +9,7 @@ import org.gtreimagined.tesseract.graph.IElement;
 import org.gtreimagined.tesseract.graph.IGrid;
 import org.gtreimagined.tesseract.graph.INotableElement;
 import org.gtreimagined.tesseract.graph.IRoutingInfo;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -140,6 +141,7 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
 
         TNetwork network = element.getNetwork();
 
+        if (network == null) return;
         network.removeElement(element);
         element.setNetwork(null);
 
@@ -221,10 +223,12 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
     public void removeElementQuietly(TElement element) {
         if (!vertices.contains(element)) return;
 
-        element.getNetwork()
-                .removeElement(element);
         vertices.remove(element);
         element.setNetwork(null);
+        if (element.getNetwork() != null) {
+            element.getNetwork()
+                    .removeElement(element);
+        }
 
         for (TElement neighbour : edges.removeAll(element)) {
             updateNeighbours(neighbour);
@@ -243,7 +247,7 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
         this.networks.remove(source);
     }
 
-    private void walkAdjacency(TElement start, HashSet<TElement> discovered, HashSet<TNetwork> networks,
+    private void walkAdjacency(TElement start, HashSet<TElement> discovered, @Nullable HashSet<TNetwork> networks,
                                boolean recurseIntoNetworked) {
         ArrayDeque<TElement> queue = new ArrayDeque<>();
 
@@ -251,6 +255,7 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
 
         while (!queue.isEmpty()) {
             TElement current = queue.removeFirst();
+            if (current.getNetwork() == null) continue;
 
             if(!discovered.add(current)) continue;
 

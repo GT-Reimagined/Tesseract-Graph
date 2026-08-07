@@ -2,6 +2,7 @@ package org.gtreimagined.tesseract.graph;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.gtreimagined.tesseract.graph.standard.StandardNetwork;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -19,9 +20,9 @@ public interface IElement<TSelf extends IElement<TSelf, TNotableElement, TRoutin
      */
     void getNeighbours(Collection<TSelf> neighbours);
 
-    TNetwork getNetwork();
+    @Nullable TNetwork getNetwork();
 
-    void setNetwork(TNetwork network);
+    void setNetwork(@Nullable TNetwork network);
 
     default void onNeighbourAdded(TSelf neighbour) {
         onNeighbourChanged(neighbour);
