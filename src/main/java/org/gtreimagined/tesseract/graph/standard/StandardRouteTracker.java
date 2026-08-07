@@ -31,16 +31,22 @@ public abstract class StandardRouteTracker<TRoutingInfo extends IRoutingInfo<TRo
     @Override
     public void onElementAdded(TElement source) {
         TNotableElement notableElement;
-        if (getNotableElementClass().isInstance(source) && (notableElement = getNotableElementClass().cast(source)).isActuallyNode()){
-            notableElements.add(notableElement);
+        if (getNotableElementClass().isInstance(source)) {
+            notableElement = getNotableElementClass().cast(source);
+            if (notableElement.isActuallyNode()) {
+                notableElements.add(notableElement);
+            }
         }
     }
 
     @Override
     public void onElementRemoved(TElement element) {
         TNotableElement notableElement;
-        if (getNotableElementClass().isInstance(element) && (notableElement = getNotableElementClass().cast(element)).isActuallyNode()){
-            notableElements.remove(notableElement);
+        if (getNotableElementClass().isInstance(element)) {
+            notableElement = getNotableElementClass().cast(element);
+            if (notableElement.isActuallyNode()) {
+                notableElements.remove(notableElement);
+            }
         }
     }
 

@@ -132,6 +132,7 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
 
     protected abstract TNetwork createNetwork();
 
+    @SuppressWarnings("ReferenceEquality")
     @Override
     public void removeElement(TElement element) {
         if (!vertices.contains(element)) return;
@@ -247,7 +248,7 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
         this.networks.remove(source);
     }
 
-    private void walkAdjacency(TElement start, HashSet<TElement> discovered, @Nullable HashSet<TNetwork> networks,
+    private void walkAdjacency(TElement start, Set<TElement> discovered, @Nullable Set<TNetwork> networks,
                                boolean recurseIntoNetworked) {
         ArrayDeque<TElement> queue = new ArrayDeque<>();
 
@@ -273,7 +274,7 @@ public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, T
         updateNeighbours(element, new HashSet<>());
     }
 
-    private void updateNeighbours(TElement element, HashSet<TElement> updated) {
+    private void updateNeighbours(TElement element, Set<TElement> updated) {
         if (!updated.add(element)) return;
 
         HashSet<TElement> neighbours = new HashSet<>();
