@@ -49,5 +49,8 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
+    options.errorprone.nullaway {
+        error()
+    }
     options.compilerArgs << "-XDaddTypeAnnotationsToSymbol=true"
 }
