@@ -2,6 +2,7 @@ plugins {
     id "maven-publish"
     id "idea"
     id "net.ltgt.errorprone" version "5.1.0"
+    id("net.ltgt.nullaway") version "3.1.0"
 }
 apply plugin: "java"
 archivesBaseName = "tesseract-graph"
@@ -19,6 +20,11 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-jre")
     errorprone "com.uber.nullaway:nullaway:0.13.8"
     errorprone "com.google.errorprone:error_prone_core:2.42.0"
+}
+
+nullaway {
+    onlyNullMarked = true
+    jspecifyMode = true
 }
 
 publishing {
@@ -42,18 +48,6 @@ publishing {
     }
 }
 
-
-import net.ltgt.gradle.errorprone.CheckSeverity
-
-tasks.withType(JavaCompile) {
-    options.errorprone {
-        check("NullAway", CheckSeverity.ERROR)
-        option("NullAway:AnnotatedPackages", "org.gtreimagined.tesseract.graph")
-    }
-    // Include to disable NullAway on test code
-    if (name.toLowerCase().contains("test")) {
-        options.errorprone {
-            disable("NullAway")
-        }
-    }
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-XDaddTypeAnnotationsToSymbol=true"
 }
