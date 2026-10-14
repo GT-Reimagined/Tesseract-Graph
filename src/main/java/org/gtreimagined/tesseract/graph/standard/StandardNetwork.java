@@ -16,34 +16,27 @@ import java.util.HashSet;
  * A pretty basic factory network.
  * This doesn't do much beyond tracking elements and components.
  */
-public abstract class StandardNetwork<TSelf extends StandardNetwork<TSelf, TElement, TNotableElement, TRoutingInfo, TGrid>, TElement extends IElement<TElement, TNotableElement, TRoutingInfo, TSelf, TGrid>, TNotableElement extends INotableElement<TNotableElement, TRoutingInfo, TElement, TSelf, TGrid>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TGrid extends IGrid<TGrid, TElement, TNotableElement, TRoutingInfo, TSelf>>
-        implements INetwork<TSelf, TElement, TNotableElement, TRoutingInfo, TGrid> {
+public abstract class StandardNetwork<TSelf extends StandardNetwork<TSelf, TElement, TRoutingInfo, TGrid>, TElement extends IElement<TElement, TRoutingInfo, TSelf, TGrid>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TGrid extends IGrid<TGrid, TElement, TRoutingInfo, TSelf>>
+        implements INetwork<TSelf, TElement, TRoutingInfo, TGrid> {
 
     public final HashSet<TElement> elements = new HashSet<>();
     public final HashMap<Class<?>, Collection<Object>> components = new HashMap<>();
     private final Class<TElement> elementClass;
-    private final Class<TNotableElement> notableElementClass;
 
-    public IRouteTracker<TRoutingInfo, TNotableElement, TElement, TSelf, TGrid> routeTracker;
+    public IRouteTracker<TRoutingInfo, TElement, TSelf, TGrid> routeTracker;
 
     private boolean networkChanged = false;
 
-    protected StandardNetwork(Class<TElement> elementClass, Class<TNotableElement> notableElementClass) {
+    protected StandardNetwork(Class<TElement> elementClass) {
         this.elementClass = elementClass;
-        this.notableElementClass = notableElementClass;
         this.routeTracker = createRouteTracker();
     }
 
-    protected abstract IRouteTracker<TRoutingInfo, TNotableElement, TElement, TSelf, TGrid> createRouteTracker();
+    protected abstract IRouteTracker<TRoutingInfo, TElement, TSelf, TGrid> createRouteTracker();
 
     @Override
     public Class<TElement> getElementClass() {
         return elementClass;
-    }
-
-    @Override
-    public Class<TNotableElement> getNotableElementClass() {
-        return notableElementClass;
     }
 
     @Override
@@ -112,7 +105,7 @@ public abstract class StandardNetwork<TSelf extends StandardNetwork<TSelf, TElem
     }
 
     @Override
-    public IRouteTracker<TRoutingInfo, TNotableElement, TElement, TSelf, TGrid> getTracker() {
+    public IRouteTracker<TRoutingInfo, TElement, TSelf, TGrid> getTracker() {
         return routeTracker;
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
  * You should create a new interface that extends this one, then specify your network and grid in the IElement
  * generics.
  */
-public interface IElement<TSelf extends IElement<TSelf, TNotableElement, TRoutingInfo, TNetwork, TGrid>, TNotableElement extends INotableElement<TNotableElement, TRoutingInfo, TSelf, TNetwork, TGrid>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNetwork extends INetwork<TNetwork, TSelf, TNotableElement, TRoutingInfo, TGrid>, TGrid extends IGrid<TGrid, TSelf, TNotableElement, TRoutingInfo, TNetwork>> {
+public interface IElement<TSelf extends IElement<TSelf, TRoutingInfo, TNetwork, TGrid>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNetwork extends INetwork<TNetwork, TSelf, TRoutingInfo, TGrid>, TGrid extends IGrid<TGrid, TSelf, TRoutingInfo, TNetwork>> {
 
     /**
      * Detects all adjacent elements, regardless of what network they're on.
@@ -48,4 +48,9 @@ public interface IElement<TSelf extends IElement<TSelf, TNotableElement, TRoutin
     default List<Pair<Class<?>, Object>> getComponents() {
         return Collections.emptyList();
     }
+
+    /** Exactly the same as getConnections, but with some routing metadata. */
+    List<RoutedNode<TSelf, TRoutingInfo>> getRoutedNeighbours();
+
+    boolean isNode();
 }

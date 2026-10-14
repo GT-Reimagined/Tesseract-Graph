@@ -7,7 +7,7 @@ import org.gtreimagined.tesseract.graph.standard.StandardGrid;
  * Grids will create and destroy networks as elements join or leave the world.
  * You usually want to extend {@link StandardGrid}, not this.
  */
-public interface IGrid<TSelf extends IGrid<TSelf, TElement, TNotableElement, TRoutingInfo, TNetwork>, TElement extends IElement<TElement, TNotableElement, TRoutingInfo, TNetwork, TSelf>, TNotableElement extends INotableElement<TNotableElement, TRoutingInfo, TElement, TNetwork, TSelf>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNetwork extends INetwork<TNetwork, TElement, TNotableElement, TRoutingInfo, TSelf>> {
+public interface IGrid<TSelf extends IGrid<TSelf, TElement, TRoutingInfo, TNetwork>, TElement extends IElement<TElement, TRoutingInfo, TNetwork, TSelf>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNetwork extends INetwork<TNetwork, TElement, TRoutingInfo, TSelf>> {
 
     /**
      * Adds an element and does potentially expensive network topology updates.

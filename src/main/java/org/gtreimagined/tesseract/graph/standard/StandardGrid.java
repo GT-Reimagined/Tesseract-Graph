@@ -21,8 +21,8 @@ import java.util.Set;
  * This handles all network topology updates, and should be compatible with most pipe systems.
  * A factory element should always register itself with this grid, even when it's not connected to anything.
  */
-public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, TNotableElement, TRoutingInfo, TNetwork>, TElement extends IElement<TElement, TNotableElement, TRoutingInfo, TNetwork, TSelf>, TNotableElement extends INotableElement<TNotableElement, TRoutingInfo, TElement, TNetwork, TSelf>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNetwork extends StandardNetwork<TNetwork, TElement, TNotableElement, TRoutingInfo, TSelf>>
-        implements IGrid<TSelf, TElement, TNotableElement, TRoutingInfo, TNetwork> {
+public abstract class StandardGrid<TSelf extends StandardGrid<TSelf, TElement, TRoutingInfo, TNetwork>, TElement extends IElement<TElement, TRoutingInfo, TNetwork, TSelf>, TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNetwork extends StandardNetwork<TNetwork, TElement, TRoutingInfo, TSelf>>
+        implements IGrid<TSelf, TElement, TRoutingInfo, TNetwork> {
 
     public static final Logger LOGGER = LogManager.getLogger("Standard Factory Network");
 

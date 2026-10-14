@@ -15,13 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public abstract class StandardRouteTracker<TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TNotableElement extends INotableElement<TNotableElement, TRoutingInfo, TElement, TNetwork, TGrid>, TElement extends IElement<TElement, TNotableElement, TRoutingInfo, TNetwork, TGrid>, TNetwork extends INetwork<TNetwork, TElement, TNotableElement, TRoutingInfo, TGrid>, TGrid extends IGrid<TGrid, TElement, TNotableElement, TRoutingInfo, TNetwork>> implements IRouteTracker<TRoutingInfo, TNotableElement, TElement, TNetwork, TGrid> {
-    Map<TNotableElement, List<RoutedNode<TNotableElement, TRoutingInfo>>> edges = new Object2ObjectOpenHashMap<>();
+public abstract class StandardRouteTracker<TRoutingInfo extends IRoutingInfo<TRoutingInfo>, TElement extends IElement<TElement, TRoutingInfo, TNetwork, TGrid>, TNetwork extends INetwork<TNetwork, TElement, TRoutingInfo, TGrid>, TGrid extends IGrid<TGrid, TElement, TRoutingInfo, TNetwork>> implements IRouteTracker<TRoutingInfo, TElement, TNetwork, TGrid> {
+    Map<TElement, List<RoutedNode<TElement, TRoutingInfo>>> edges = new Object2ObjectOpenHashMap<>();
 
-    public final HashSet<TNotableElement> notableElements = new HashSet<>();
+    public final HashSet<TElement> notableElements = new HashSet<>();
 
     @Override
-    public List<RoutedNode<TNotableElement, TRoutingInfo>> getPaths(TNotableElement source) {
+    public List<RoutedNode<TElement, TRoutingInfo>> getPaths(TElement source) {
         if (edges.containsKey(source)) {
             return edges.get(source);
         }
@@ -30,23 +30,15 @@ public abstract class StandardRouteTracker<TRoutingInfo extends IRoutingInfo<TRo
 
     @Override
     public void onElementAdded(TElement source) {
-        TNotableElement notableElement;
-        if (getNotableElementClass().isInstance(source)) {
-            notableElement = getNotableElementClass().cast(source);
-            if (notableElement.isActuallyNode()) {
-                notableElements.add(notableElement);
-            }
+        if (source.isNode()){
+            notableElements.add(source);
         }
     }
 
     @Override
     public void onElementRemoved(TElement element) {
-        TNotableElement notableElement;
-        if (getNotableElementClass().isInstance(element)) {
-            notableElement = getNotableElementClass().cast(element);
-            if (notableElement.isActuallyNode()) {
-                notableElements.remove(notableElement);
-            }
+        if (element.isNode()){
+            notableElements.remove(element);
         }
     }
 
@@ -54,18 +46,18 @@ public abstract class StandardRouteTracker<TRoutingInfo extends IRoutingInfo<TRo
     public void updateEdges() {
         edges.clear();
 
-        for (TNotableElement notableElement : notableElements) {
-            List<RoutedNode<TNotableElement, TRoutingInfo>> paths = makePaths(notableElement);
+        for (TElement notableElement : notableElements) {
+            List<RoutedNode<TElement, TRoutingInfo>> paths = makePaths(notableElement);
             if (!paths.isEmpty()) {
                 edges.put(notableElement, paths);
             }
         }
-        ObjectOpenHashSet<RoutedNode<TNotableElement, TRoutingInfo>> uniqueNodes = new ObjectOpenHashSet<>();
-        for (TNotableElement notableElement : notableElements){
+        ObjectOpenHashSet<RoutedNode<TElement, TRoutingInfo>> uniqueNodes = new ObjectOpenHashSet<>();
+        for (TElement notableElement : notableElements){
             if (edges.containsKey(notableElement)){
-                List<RoutedNode<TNotableElement, TRoutingInfo>> list = edges.get(notableElement);
+                List<RoutedNode<TElement, TRoutingInfo>> list = edges.get(notableElement);
                 for (int j = 0; j < list.size(); j++) {
-                    RoutedNode<TNotableElement, TRoutingInfo> node = list.get(j);
+                    RoutedNode<TElement, TRoutingInfo> node = list.get(j);
                     if (!uniqueNodes.add(list.get(j))){
                         list.set(j, uniqueNodes.get(node));
                     }
@@ -74,12 +66,12 @@ public abstract class StandardRouteTracker<TRoutingInfo extends IRoutingInfo<TRo
         }
     }
 
-    public abstract int sort(RoutedNode<TNotableElement, TRoutingInfo> a, RoutedNode<TNotableElement, TRoutingInfo> b);
+    public abstract int sort(RoutedNode<TElement, TRoutingInfo> a, RoutedNode<TElement, TRoutingInfo> b);
 
-    public abstract Class<TNotableElement> getNotableElementClass();
+    public abstract Class<TElement> getNotableElementClass();
 
-    private List<RoutedNode<TNotableElement, TRoutingInfo>> makePaths(TNotableElement source) {
-        List<RoutedNode<TNotableElement, TRoutingInfo>> sourcePaths = new ArrayList<>(source.getRoutedNeighbours());
+    private List<RoutedNode<TElement, TRoutingInfo>> makePaths(TElement source) {
+        List<RoutedNode<TElement, TRoutingInfo>> sourcePaths = new ArrayList<>(source.getRoutedNeighbours());
         sourcePaths.sort(this::sort);
         return sourcePaths;
     }
