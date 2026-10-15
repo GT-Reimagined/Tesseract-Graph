@@ -5,7 +5,9 @@ plugins {
     id("net.ltgt.nullaway") version "3.1.0"
 }
 apply plugin: "java"
-archivesBaseName = "tesseract-graph"
+base {
+    archivesName = "tesseract-graph"
+}
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 repositories {
